@@ -8,7 +8,7 @@ import okhttp3.HttpUrl;
  * @author Fastily
  *
  */
-class Conf
+public class Conf
 {
 	/**
 	 * The {@code User-Agent} header to use for HTTP requests.
@@ -50,7 +50,7 @@ class Conf
 	/**
 	 * CSRF token. Used for actions that change Wiki content.
 	 */
-	protected String token = "+\\";
+	public String token = "+\\";
 
 	/**
 	 * Constructor, creates a new Conf pointing to en.wikipedia.org.

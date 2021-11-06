@@ -31,7 +31,7 @@ public final class MQuery
 	/**
 	 * The group {@code prop} query (multiple titles query) maximum
 	 */
-	private static final int groupQueryMax = 50;
+	private static final int groupQueryMax = 30;
 
 	/**
 	 * Constructors disallowed
@@ -52,7 +52,7 @@ public final class MQuery
 	 * @param elemArrKey The key for each JsonArray for each title the resulting set
 	 * @return A Map where the key is the title of the page, and the value is the List of properties fetched.
 	 */
-	private static MultiMap<String, JsonObject> getContProp(Wiki wiki, Collection<String> titles, QTemplate qut,
+	public static MultiMap<String, JsonObject> getContProp(Wiki wiki, Collection<String> titles, QTemplate qut,
 			HashMap<String, String> pl, String elemArrKey)
 	{
 		MultiMap<String, JsonObject> l = new MultiMap<>();
@@ -78,6 +78,32 @@ public final class MQuery
 		return l;
 	}
 
+	public static MultiMap<String, String> getContPropString(Wiki wiki, Collection<String> titles, QTemplate qut,
+			HashMap<String, String> pl, String elemArrKey)
+	{
+		MultiMap<String, String> l = new MultiMap<>();
+
+		if (FL.containsNull(titles))
+			throw new IllegalArgumentException("null is not an acceptable title to query with");
+
+		GroupQueue<String> gq = new GroupQueue<>(titles, groupQueryMax);
+
+		while (gq.has())
+		{
+			WQuery wq = new WQuery(wiki, qut).set("titles", gq.poll());
+			if (pl != null)
+				pl.forEach(wq::set);
+
+			while (wq.has())
+				wq.next().propComp("title", elemArrKey).forEach((k, v) -> {
+					l.touch(k);
+					if (v != null)
+						l.put(k, v.getAsString());
+				});
+		}
+		return l;
+	}
+
 	/**
 	 * Performs a non-continuing {@code prop} query. Grabs a title and an element from each returned page.
 	 * 
@@ -88,8 +114,8 @@ public final class MQuery
 	 * @param eKey The value key to get from each page element. If this cannot be found, then it is set to null.
 	 * @return The {@code title} of each page as the key, and the value of the associated {@code eKey}.
 	 */
-	private static HashMap<String, JsonElement> getNoContProp(Wiki wiki, Collection<String> titles, QTemplate qut,
-			HashMap<String, String> pl, String eKey)
+	public static HashMap<String, JsonElement> getNoContProp(Wiki wiki, Collection<String> titles, QTemplate qut,
+															 HashMap<String, String> pl, String eKey)
 	{
 		HashMap<String, JsonElement> m = new HashMap<>();
 
@@ -147,7 +173,7 @@ public final class MQuery
 	 * @param elemKey The key pointing to String to get in each JsonObject.
 	 * @return Each title, and the values that were found for it.
 	 */
-	private static HashMap<String, ArrayList<String>> parsePropToSingle(MultiMap<String, JsonObject> m, String elemKey)
+	public static HashMap<String, ArrayList<String>> parsePropToSingle(MultiMap<String, JsonObject> m, String elemKey)
 	{
 		HashMap<String, ArrayList<String>> xl = new HashMap<>();
 		m.l.forEach((k, v) -> xl.put(k, FL.toAL(v.stream().map(e -> GSONP.getStr(e, elemKey)))));
@@ -162,7 +188,7 @@ public final class MQuery
 	 * @param m The MapList to work with
 	 * @return Each title, and the values that were found for it.
 	 */
-	private static HashMap<String, ArrayList<String>> parsePropToSingle(MultiMap<String, JsonObject> m)
+	public static HashMap<String, ArrayList<String>> parsePropToSingle(MultiMap<String, JsonObject> m)
 	{
 		return parsePropToSingle(m, "title");
 	}
@@ -175,8 +201,8 @@ public final class MQuery
 	 * @param elemKey2 The key pointing to the second String to get in each JsonObject.
 	 * @return Each title, and the values that were found for it.
 	 */
-	private static HashMap<String, ArrayList<Tuple<String, String>>> parsePropToDouble(MultiMap<String, JsonObject> m, String elemKey1,
-			String elemKey2)
+	public static HashMap<String, ArrayList<Tuple<String, String>>> parsePropToDouble(MultiMap<String, JsonObject> m, String elemKey1,
+																					  String elemKey2)
 	{
 		HashMap<String, ArrayList<Tuple<String, String>>> xl = new HashMap<>();
 		m.l.forEach(

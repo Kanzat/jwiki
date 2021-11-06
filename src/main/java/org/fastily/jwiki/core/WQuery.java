@@ -19,7 +19,7 @@ import com.google.gson.reflect.TypeToken;
  * @author Fastily
  *
  */
-class WQuery
+public class WQuery
 {
 	/**
 	 * Default parameters for getting category size info
@@ -378,7 +378,7 @@ class WQuery
 	 * @author Fastily
 	 *
 	 */
-	protected static class QTemplate
+	public static class QTemplate
 	{
 		/**
 		 * The default fields for this query type
@@ -430,7 +430,7 @@ class WQuery
 	 * @author Fastily
 	 *
 	 */
-	protected static class QReply
+	public static class QReply
 	{
 		/**
 		 * Default path to json for {@code prop} queries.
@@ -467,7 +467,7 @@ class WQuery
 		 * @param k Points to the JsonArray of JsonObject, under {@code query}, of interest.
 		 * @return A lightly processed ArrayList of {@code list} data.
 		 */
-		protected ArrayList<JsonObject> listComp(String k)
+		public ArrayList<JsonObject> listComp(String k)
 		{
 			return input.has("query") ? GSONP.getJAofJO(input.getAsJsonObject("query"), k) : new ArrayList<>();
 		}
@@ -500,7 +500,7 @@ class WQuery
 		 * @param k The key to get a JsonElement for.
 		 * @return The JsonElement pointed to by {@code k} or null/empty JsonObject on error.
 		 */
-		protected JsonElement metaComp(String k)
+		public JsonElement metaComp(String k)
 		{
 			return input.has("query") ? input.getAsJsonObject("query").get(k) : new JsonObject();
 		}

@@ -27,7 +27,7 @@ import okhttp3.Response;
  * @author Fastily
  *
  */
-class ApiClient
+public class ApiClient
 {
 	/**
 	 * MediaType for {@code application/octet-stream}.
@@ -104,7 +104,7 @@ class ApiClient
 	 * @return A Response object with the result of this Request.
 	 * @throws IOException Network error
 	 */
-	protected Response basicGET(HashMap<String, String> params) throws IOException
+	public Response basicGET(HashMap<String, String> params) throws IOException
 	{
 		return client.newCall(startReq(params).get().build()).execute();
 	}
@@ -117,7 +117,7 @@ class ApiClient
 	 * @return A Response object with the result of this Request.
 	 * @throws IOException Network error
 	 */
-	protected Response basicPOST(HashMap<String, String> params, HashMap<String, String> form) throws IOException
+	public Response basicPOST(HashMap<String, String> params, HashMap<String, String> form) throws IOException
 	{
 		FormBody.Builder fb = new FormBody.Builder();
 		form.forEach(fb::add);

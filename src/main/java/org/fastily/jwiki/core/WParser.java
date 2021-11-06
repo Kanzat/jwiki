@@ -44,16 +44,21 @@ public class WParser
 	 * @param queryParams Parameters to POST to the server
 	 * @return A WikiText object, or null on error.
 	 */
-	private static WikiText parse(Wiki wiki, HashMap<String, String> queryParams)
-	{
+	private static WikiText parse(Wiki wiki, HashMap<String, String> queryParams) {
 		queryParams.put("prop", "parsetree");
-		try
-		{
+		try {
 			XMLEventReader r = XMLInputFactory.newInstance()
 					.createXMLEventReader(new StringReader(GSONP
 							.getStr(GSONP.getNestedJO(JsonParser.parseString(wiki.basicPOST("parse", queryParams).body().string()).getAsJsonObject(),
 									FL.toSAL("parse", "parsetree")), "*")));
+			return parseInternal(r);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
+	static WikiText parseInternal(XMLEventReader r) throws Throwable {
 			WikiText root = new WikiText();
 			while (r.hasNext())
 			{
@@ -65,12 +70,7 @@ public class WParser
 					root.append(cToStr(e));
 			}
 			return root;
-		}
-		catch (Throwable e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+
 	}
 
 	/**

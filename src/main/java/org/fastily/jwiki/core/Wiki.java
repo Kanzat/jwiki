@@ -195,12 +195,12 @@ public class Wiki
 	/**
 	 * Default configuration and settings for this Wiki.
 	 */
-	protected Conf conf = new Conf();
+	public Conf conf = new Conf();
 
 	/**
 	 * Used to make calls to and from the API.
 	 */
-	protected ApiClient apiclient;
+	public ApiClient apiclient;
 
 	/**
 	 * Constructor, creates a new Wiki

@@ -24,8 +24,11 @@ import okio.Okio;
  * @author Fastily
  *
  */
-class WAction
+public class WAction
 {
+
+	private static final Logger logger = LoggerFactory.getLogger(WAction.class);
+
 	/**
 	 * All static methods, constructors disallowed.
 	 */
@@ -149,7 +152,7 @@ class WAction
 	{
 		wiki.conf.log.info(wiki, String.format("Moving %s to %s", title, newTitle));
 
-		HashMap<String, String> pl = FL.pMap("from", title, "to", newTitle, "reason", reason);
+		HashMap<String, String> pl = FL.pMap("title", title, "from", title, "to", newTitle, "reason", reason);
 
 		if (moveTalk)
 			pl.put("movetalk", "1");
@@ -356,7 +359,7 @@ class WAction
 						case "Success":
 							return SUCCESS;
 						default:
-							System.err.printf("Something isn't right.  Got back '%s', missing a 'result'?%n", GSONP.gson.toJson(jo));
+							logger.error("Something isn't right.  Got back '" + GSONP.gson.toJson(jo) + "', missing a 'result'?");
 					}
 				else if (jo.has("error"))
 					switch (GSONP.getStr(jo.getAsJsonObject("error"), "code"))

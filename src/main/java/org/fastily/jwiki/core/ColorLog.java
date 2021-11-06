@@ -1,6 +1,8 @@
 package org.fastily.jwiki.core;
 
-import java.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -12,6 +14,8 @@ import java.time.format.DateTimeFormatter;
  */
 class ColorLog
 {
+	private static final Logger logger = LoggerFactory.getLogger(ColorLog.class);
+
 	/**
 	 * The date formatter prefixing output.
 	 */
@@ -33,20 +37,6 @@ class ColorLog
 	}
 
 	/**
-	 * Logs a message for a wiki method.
-	 * 
-	 * @param wiki The wiki object to use
-	 * @param message The String to print
-	 * @param logLevel The identifier to log the message at (e.g. "INFO", "WARNING")
-	 * @param color The color to print the message with. Output will only be colored if this terminal supports it.
-	 */
-	private void log(Wiki wiki, String message, String logLevel, CC color)
-	{
-		if (enabled)
-			System.err.printf("%s%n%s: \u001B[3%dm%s: %s\u001B[0m%n", LocalDateTime.now().format(df), logLevel, color.v, wiki, message);
-	}
-
-	/**
 	 * Output warning message for wiki. Text is yellow.
 	 * 
 	 * @param wiki The wiki object to use
@@ -54,7 +44,9 @@ class ColorLog
 	 */
 	protected void warn(Wiki wiki, String s)
 	{
-		log(wiki, s, "WARNING", CC.YELLOW);
+		if (enabled) {
+			logger.warn(wiki + ": " + s);
+		}
 	}
 
 	/**
@@ -65,7 +57,9 @@ class ColorLog
 	 */
 	protected void info(Wiki wiki, String s)
 	{
-		log(wiki, s, "INFO", CC.GREEN);
+		if (enabled) {
+			logger.info(wiki + ": " + s);
+		}
 	}
 
 	/**
@@ -76,7 +70,9 @@ class ColorLog
 	 */
 	protected void error(Wiki wiki, String s)
 	{
-		log(wiki, s, "ERROR", CC.RED);
+		if (enabled) {
+			logger.error(wiki + ": " + s);
+		}
 	}
 
 	/**
@@ -87,7 +83,9 @@ class ColorLog
 	 */
 	protected void debug(Wiki wiki, String s)
 	{
-		log(wiki, s, "DEBUG", CC.PURPLE);
+		if (enabled) {
+			logger.debug(wiki + ": " + s);
+		}
 	}
 
 	/**
@@ -98,70 +96,9 @@ class ColorLog
 	 */
 	protected void fyi(Wiki wiki, String s)
 	{
-		log(wiki, s, "FYI", CC.CYAN);
-	}
-
-	/**
-	 * Represents ASCII colors.
-	 * 
-	 * @author Fastily
-	 *
-	 */
-	private static enum CC
-	{
-		/**
-		 * A font color, black, which can be applied to a String if your terminal supports it.
-		 */
-		BLACK(0),
-
-		/**
-		 * A font color, red, which can be applied to a String if your terminal supports it.
-		 */
-		RED(1),
-
-		/**
-		 * A font color, green, which can be applied to a String if your terminal supports it.
-		 */
-		GREEN(2),
-
-		/**
-		 * A font color, yellow, which can be applied to a String if your terminal supports it.
-		 */
-		YELLOW(3),
-
-		/**
-		 * A font color, blue, which can be applied to a String if your terminal supports it.
-		 */
-		BLUE(4),
-
-		/**
-		 * A font color, purple, which can be applied to a String if your terminal supports it.
-		 */
-		PURPLE(5),
-
-		/**
-		 * A font color, cyan, which can be applied to a String if your terminal supports it.
-		 */
-		CYAN(6),
-
-		/**
-		 * A font color, white, which can be applied to a String if your terminal supports it.
-		 */
-		WHITE(7);
-
-		/**
-		 * The ascii color value.
-		 */
-		private int v;
-
-		/**
-		 * Constructor, creates a new CC.
-		 * 
-		 * @param v The color code to use.
-		 */
-		private CC(int v)
-		{
-			this.v = v;
+		if (enabled) {
+			logger.info(wiki + ": " + s);
 		}
 	}
+
 }
