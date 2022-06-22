@@ -53,7 +53,7 @@ javadoc {
         links "https://docs.oracle.com/en/java/javase/11/docs/api/"
         //links "https://square.github.io/okio/1.x/okio/"
         //links "https://square.github.io/okhttp/3.x/okhttp/"
-        links "https://kanzat.github.io/jwiki/docs/gson/"
+        //links "https://kanzat.github.io/jwiki/docs/gson/"
         
         // links "http://square.github.io/okhttp/3.x/mockwebserver/"
         // setOutputLevel JavadocOutputLevel.VERBOSE
