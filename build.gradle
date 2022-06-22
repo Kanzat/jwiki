@@ -7,7 +7,7 @@ plugins {
 }
 
 description="${project.name} build script"
-group="org.fastily"
+group="org.kanzat"
 version="1.8.1"
 
 repositories {
@@ -53,7 +53,7 @@ javadoc {
         links "https://docs.oracle.com/en/java/javase/11/docs/api/"
         //links "https://square.github.io/okio/1.x/okio/"
         //links "https://square.github.io/okhttp/3.x/okhttp/"
-        links "https://fastily.github.io/jwiki/docs/gson/"
+        links "https://kanzat.github.io/jwiki/docs/gson/"
         
         // links "http://square.github.io/okhttp/3.x/mockwebserver/"
         // setOutputLevel JavadocOutputLevel.VERBOSE
@@ -73,8 +73,8 @@ publishing {
             pom {
                 name = 'jwiki'
                 description = 'A library for effortlessly interacting with Wikipedia/MediaWiki'
-                inceptionYear = '2014'
-                url = 'https://github.com/fastily/jwiki'
+                inceptionYear = '2021'
+                url = 'https://github.com/Kanzat/jwiki'
                 licenses {
                     license {
                         name = 'GNU General Public License, Version 3.0'
@@ -83,21 +83,22 @@ publishing {
                 }
                 developers {
                     developer {
-                        id = 'fastily'
-                        name = 'Fastily'
-                        email = 'fastily@users.noreply.github.com'
+                        id = 'kanzat'
+                        name = 'Kanzat'
+                        email = 'kanzat@users.noreply.github.com'
                     }
                 }
                 scm {
-                    connection = 'scm:git:https://github.com/fastily/jwiki.git'
-                    developerConnection = 'scm:git:ssh://github.com/fastily/jwiki.git'
-                    url = 'https://github.com/fastily/jwiki'
+                    connection = 'scm:git:https://github.com/Kanzat/jwiki.git'
+                    developerConnection = 'scm:git:ssh://github.com/Kanzat/jwiki.git'
+                    url = 'https://github.com/Kanzat/jwiki'
                 }
             }
         }
     }
 
     repositories {
+/*
         maven {
             url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 
@@ -106,10 +107,22 @@ publishing {
                 password hasProperty("ossrhPassword") ? "$ossrhPassword" : System.getenv('ossrhPassword')
             }
         }
+*/	
+
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/Kanzat/jwiki"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
 
 
+/*
 signing {
     sign publishing.publications.mavenJava
 }
+*/
