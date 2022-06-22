@@ -17,6 +17,8 @@ import okhttp3.HttpUrl;
 import okhttp3.Response;
 import okio.BufferedSource;
 import okio.Okio;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Static methods to perform changes to a Wiki.
