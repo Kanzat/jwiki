@@ -23,6 +23,7 @@ import org.fastily.jwiki.util.GSONP;
 import org.fastily.jwiki.util.Tuple;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import okhttp3.HttpUrl;
@@ -1212,7 +1213,8 @@ public class Wiki
 	 * Splits the text of a page by header.
 	 * 
 	 * @param title The title to query
-	 * @return An ArrayList where each section (in order) is contained in a PageSection object.
+	 * @return An ArrayList where each section (in order) is contained in a PageSection object. Empty if the page does
+	 *         not exist or the page could not be loaded.
 	 */
 	public ArrayList<PageSection> splitPageByHeader(String title)
 	{
@@ -1220,13 +1222,23 @@ public class Wiki
 
 		try
 		{
-			return PageSection.pageBySection(
-					GSONP.getJAofJO(GSONP.getNestedJA(JsonParser.parseString(basicGET("parse", "prop", "sections", "page", title).body().string()).getAsJsonObject(), FL.toSAL("parse", "sections"))),
-					getPageText(title));
+			JsonObject result = JsonParser.parseString(basicGET("parse", "prop", "sections", "page", title).body().string()).getAsJsonObject();
+			if (result.has("error"))
+			{
+				String code = GSONP.getStr(result.getAsJsonObject("error"), "code");
+				if ("missingtitle".equals(code))
+					conf.log.info(this, title + " does not exist");
+				else
+					conf.log.error(this, String.format("Could not split '%s' by header: %s", title, code));
+
+				return new ArrayList<>();
+			}
+
+			return PageSection.pageBySection(GSONP.getJAofJO(GSONP.getNestedJA(result, FL.toSAL("parse", "sections"))), getPageText(title));
 		}
 		catch (Throwable e)
 		{
-			e.printStackTrace();
+			conf.log.error(this, String.format("Could not split '%s' by header: %s", title, e));
 			return new ArrayList<>();
 		}
 	}

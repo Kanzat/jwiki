@@ -234,4 +234,28 @@ public class MockQueryTests extends BaseMockTemplate
 		assertTrue(l.contains("File:TestTest.jpg"));
 	}
 
+	/**
+	 * Tests splitting a page which does not exist by header
+	 */
+	@Test
+	public void testSplitMissingPageByHeader()
+	{
+		addResponse("mockParseMissingTitle");
+
+		assertTrue(wiki.splitPageByHeader("User:Fastily/Sandbox/DoesNotExist").isEmpty());
+		// siteinfo and parse only: the text of a missing page isn't fetched
+		assertEquals(2, server.getRequestCount());
+	}
+
+	/**
+	 * Tests splitting a page by header when the server answers with an error
+	 */
+	@Test
+	public void testSplitPageByHeaderError()
+	{
+		addResponse("mockParseInvalidTitle");
+
+		assertTrue(wiki.splitPageByHeader("Foo[Bar]").isEmpty());
+		assertEquals(2, server.getRequestCount());
+	}
 }
