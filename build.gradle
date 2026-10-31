@@ -28,8 +28,22 @@ dependencies {
 }
 
 
+// These tests query test.wikipedia.org and break whenever the live data changes,
+// so they run only via `./gradlew liveTest`, not as part of `build`.
+def liveTests = ['**/QueryTests.class', '**/MQueryTests.class', '**/TPTests.class']
+
 test {
 	useJUnitPlatform()
+	exclude liveTests
+}
+
+tasks.register('liveTest', Test) {
+	description = 'Runs tests against the live test.wikipedia.org.'
+	group = 'verification'
+	testClassesDirs = sourceSets.test.output.classesDirs
+	classpath = sourceSets.test.runtimeClasspath
+	useJUnitPlatform()
+	include liveTests
 }
 
 
