@@ -61,7 +61,7 @@ javadoc {
 }
 
 wrapper {
-    gradleVersion = '7.0'
+    gradleVersion = '9.8.2'
 }
 
 
